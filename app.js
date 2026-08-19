@@ -4,7 +4,7 @@
 // CA alone lights up the contract bar (click-to-copy), the Chart icon
 // (DexScreener) and the Buy icon (pump.fun). COMMUNITY_URL lights the
 // community icon whenever you have one.
-const CA = '';
+const CA = 'xLKiAS4FowA2iAXak4Nd7d1GUMv8mPTgiirp44rpump';
 const COMMUNITY_URL = '';
 
 const vidA = document.getElementById('heroA');
