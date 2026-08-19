@@ -28,17 +28,7 @@ html, body {
   filter: saturate(1.08) contrast(1.04);
 }
 .hero.on { opacity: 1; }
-#stage { cursor: pointer; }
-#egg {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity .25s linear;
-  pointer-events: none;
-  filter: saturate(1.08) contrast(1.04);
-}
-#egg.on { opacity: 1; }
+#stage { cursor: default; }
 
 /* ---------- cinematic bars ---------- */
 #cine .bar {

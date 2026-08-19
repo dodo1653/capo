@@ -86,25 +86,6 @@ vol.addEventListener('input', () => {
   applyAudio(standby);
 });
 
-// ---------- easter egg: click the dog, get the explosion ----------
-const egg = document.getElementById('egg');
-const EGG_START = 11.4; // jump straight to the getaway's final seconds
-let eggBusy = false;
-
-document.getElementById('stage').addEventListener('click', () => {
-  if (!booted || eggBusy) return;
-  eggBusy = true;
-  egg.currentTime = EGG_START;
-  egg.muted = muted;
-  egg.volume = parseFloat(vol.value);
-  egg.classList.add('on');
-  egg.play().catch(() => { eggBusy = false; egg.classList.remove('on'); });
-});
-egg.addEventListener('ended', () => {
-  egg.classList.remove('on');
-  setTimeout(() => { egg.pause(); eggBusy = false; }, 300);
-});
-
 // ---------- launch links ----------
 function goLive(id, href, title) {
   const el = document.getElementById(id);
