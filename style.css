@@ -1,0 +1,240 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --pink: #e8a0ac;
+  --fire: #ff9a3c;
+  --ink: #0a0a0c;
+  --fg: #f2ede6;
+  --dim: #b9b0a4;
+}
+
+html, body {
+  height: 100%;
+  background: #000;
+  color: var(--fg);
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- stage ---------- */
+#stage { position: fixed; inset: 0; background: #000; }
+.hero {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity .9s linear;
+  filter: saturate(1.08) contrast(1.04);
+}
+.hero.on { opacity: 1; }
+#stage { cursor: pointer; }
+#egg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity .25s linear;
+  pointer-events: none;
+  filter: saturate(1.08) contrast(1.04);
+}
+#egg.on { opacity: 1; }
+
+/* ---------- cinematic bars ---------- */
+#cine .bar {
+  position: fixed; left: 0; right: 0; height: 7vh; min-height: 34px;
+  background: #000; z-index: 30;
+  transition: transform 1.1s cubic-bezier(.7,0,.3,1);
+}
+#cine .bar.top { top: 0; transform: translateY(-100%); }
+#cine .bar.bot { bottom: 0; transform: translateY(100%); }
+body.booted #cine .bar { transform: translateY(0); }
+
+/* ---------- crt ---------- */
+#crt { position: fixed; inset: 0; pointer-events: none; z-index: 40; }
+#crt .scan {
+  position: absolute; inset: 0; display: block;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.16) 0 1px, transparent 1px 3px);
+  mix-blend-mode: multiply;
+  animation: flick 4s steps(2) infinite;
+}
+#crt .vig {
+  position: absolute; inset: 0; display: block;
+  background: radial-gradient(ellipse at center, transparent 52%, rgba(0,0,0,.52) 100%);
+}
+@keyframes flick { 0%,100% { opacity: .9; } 50% { opacity: 1; } }
+
+/* ---------- hud ---------- */
+.ticker {
+  display: block;
+  font-weight: 700;
+  font-size: clamp(30px, 5vw, 52px);
+  letter-spacing: .10em;
+  line-height: 1;
+  color: var(--fg);
+  text-shadow: 0 0 18px rgba(255,154,60,.45), 0 0 40px rgba(232,160,172,.25);
+  margin-bottom: 10px;
+}
+#hud {
+  position: fixed; left: 22px; right: 22px; bottom: calc(7vh + 18px);
+  z-index: 50;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  opacity: 0; transition: opacity 1s ease .4s;
+}
+body.booted #hud, body.booted .soundbar { opacity: 1; }
+
+.hdr {
+  display: block;
+  font-size: 11px; font-weight: 300; letter-spacing: .34em; text-transform: uppercase;
+  color: var(--dim); margin-bottom: 8px;
+}
+.social { display: flex; gap: 10px; margin-bottom: 12px; }
+.ico {
+  width: 40px; height: 40px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--fg);
+  background: rgba(10,10,12,.55);
+  border: 1px solid rgba(242,237,230,.22);
+  backdrop-filter: blur(3px);
+  transition: border-color .2s, color .2s, transform .2s;
+}
+.ico svg { width: 18px; height: 18px; }
+a.ico:not(.pending):hover { color: var(--pink); border-color: var(--pink); transform: translateY(-2px); }
+.ico.pending { color: rgba(242,237,230,.3); cursor: not-allowed; }
+
+.addr {
+  display: flex; align-items: stretch;
+  border: 1px solid rgba(242,237,230,.22);
+  background: rgba(10,10,12,.55);
+  backdrop-filter: blur(3px);
+  max-width: 430px;
+}
+.addr .wbar {
+  display: flex; align-items: center;
+  padding: 8px 12px;
+  background: rgba(232,160,172,.14);
+  border-right: 1px solid rgba(242,237,230,.22);
+}
+.addr .wbar span {
+  font-size: 10px; font-weight: 500; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--pink);
+}
+.addr .body { display: flex; align-items: center; padding: 8px 14px; min-width: 0; }
+.ca { font-size: 13px; letter-spacing: .06em; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ca.soon { color: var(--dim); letter-spacing: .22em; text-transform: uppercase; font-size: 11px; font-weight: 300; }
+.ca.copy { cursor: pointer; }
+
+.memesbtn {
+  font-family: inherit;
+  font-size: 14px; font-weight: 500; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--fg);
+  background: rgba(10,10,12,.55);
+  border: 1px solid rgba(242,237,230,.22);
+  padding: 12px 26px;
+  cursor: pointer;
+  backdrop-filter: blur(3px);
+  transition: border-color .2s, color .2s, box-shadow .2s;
+}
+.memesbtn:hover { color: var(--fire); border-color: var(--fire); box-shadow: 0 0 18px rgba(255,154,60,.25); }
+
+/* ---------- sound ---------- */
+.soundbar {
+  position: fixed; top: calc(7vh + 16px); right: 22px; z-index: 50;
+  display: flex; align-items: center; gap: 10px;
+  opacity: 0; transition: opacity 1s ease .4s;
+}
+.soundbtn {
+  font-family: inherit;
+  font-size: 11px; font-weight: 500; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--fg);
+  background: rgba(10,10,12,.55);
+  border: 1px solid rgba(242,237,230,.22);
+  padding: 9px 16px;
+  cursor: pointer;
+  backdrop-filter: blur(3px);
+  transition: color .2s, border-color .2s;
+}
+.soundbar:not(.muted) .soundbtn { color: var(--pink); border-color: var(--pink); }
+.volwrap { display: flex; align-items: center; }
+.vol { width: 90px; accent-color: var(--pink); cursor: pointer; }
+.soundbar.muted .volwrap { opacity: .35; }
+
+/* ---------- memes sheet ---------- */
+.sheet {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(0,0,0,.72);
+  display: flex; align-items: center; justify-content: center;
+  padding: 4vh 4vw;
+}
+.win {
+  width: min(980px, 100%); max-height: 100%;
+  display: flex; flex-direction: column;
+  background: #101014;
+  border: 1px solid rgba(242,237,230,.3);
+  box-shadow: 0 0 0 1px #000, 0 22px 70px rgba(0,0,0,.7);
+}
+.tbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px;
+  background: linear-gradient(90deg, rgba(232,160,172,.22), rgba(255,154,60,.10) 60%, transparent);
+  border-bottom: 1px solid rgba(242,237,230,.25);
+  user-select: none;
+}
+.tt { font-size: 12px; font-weight: 700; letter-spacing: .4em; }
+.btns { display: flex; gap: 10px; align-items: center; color: var(--dim); font-style: normal; }
+.btns i { font-style: normal; font-size: 12px; }
+.btns b { cursor: pointer; font-size: 13px; padding: 0 4px; }
+.btns b:hover { color: var(--fire); }
+
+#memegrid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+  padding: 12px; overflow-y: auto;
+}
+.meme {
+  position: relative; border: 1px solid rgba(242,237,230,.18);
+  background: #000; padding: 0; cursor: pointer;
+  aspect-ratio: 1 / 1; overflow: hidden;
+}
+.meme img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(1.05); transition: transform .25s ease, filter .25s; }
+.meme:hover img { transform: scale(1.06); filter: saturate(1.15); }
+.meme::after {
+  content: '\25B6';
+  position: absolute; right: 8px; bottom: 6px;
+  font-size: 12px; color: #fff;
+  text-shadow: 0 0 6px #000, 0 0 2px #000;
+  opacity: .85;
+}
+
+/* ---------- lightbox ---------- */
+#light {
+  position: fixed; inset: 0; z-index: 70;
+  background: rgba(0,0,0,.92);
+  display: flex; align-items: center; justify-content: center;
+}
+#lightimg { max-width: 92vw; max-height: 86vh; outline: 1px solid rgba(242,237,230,.25); background: #000; object-fit: contain; }
+.x {
+  position: absolute;
+  font-family: inherit; font-size: 12px; font-weight: 500;
+  letter-spacing: .3em; text-transform: uppercase;
+  color: var(--fg);
+  background: rgba(10,10,12,.6);
+  border: 1px solid rgba(242,237,230,.25);
+  padding: 10px 18px; cursor: pointer;
+}
+.x:hover { color: var(--fire); border-color: var(--fire); }
+.x.close { top: 22px; right: 22px; }
+.x.nav { top: 50%; transform: translateY(-50%); font-size: 22px; padding: 8px 16px; }
+.x.prev { left: 18px; }
+.x.next { right: 18px; }
+
+[hidden] { display: none !important; }
+
+/* ---------- mobile ---------- */
+@media (max-width: 720px) {
+  #hud { flex-direction: column; align-items: stretch; gap: 14px; left: 14px; right: 14px; }
+  .memesbtn { width: 100%; }
+  .addr { max-width: none; }
+  #memegrid { grid-template-columns: repeat(2, 1fr); }
+  .soundbar { right: 14px; }
+  .vol { width: 64px; }
+}

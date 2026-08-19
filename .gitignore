@@ -1,0 +1,4 @@
+node_modules/
+dist/
+serve.mjs
+static.json
